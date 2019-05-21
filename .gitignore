@@ -1,0 +1,6 @@
+build
+lib
+dist
+nbproject
+build.xml
+datos.db
