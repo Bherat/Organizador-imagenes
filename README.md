@@ -1,2 +1,2 @@
 # Organizador-imagenes
-this a personal project for improve my JAVA skills
+this a personal project to improve my JAVA skills
