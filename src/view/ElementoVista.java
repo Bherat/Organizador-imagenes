@@ -19,6 +19,7 @@ public class ElementoVista extends Elemento{
         Dimension dmsn = this.getPreferredSize();
         this.setSize(dmsn);
         
+        this.Imagen.setFont(new Font("Verdana", Font.BOLD, 10));
         this.Imagen.setText(text);
     }
     
@@ -40,6 +41,10 @@ public class ElementoVista extends Elemento{
         this.txtTitulo.setBackground(new Color(0, 0, 0, 135));
         this.txtTitulo.setForeground(Color.WHITE);
         this.add(txtTitulo, 0);
+    }
+    
+    public void addDescripcion(String text) {
+        this.Imagen.setToolTipText(text);
     }
 
     public JLabel getImagen() {

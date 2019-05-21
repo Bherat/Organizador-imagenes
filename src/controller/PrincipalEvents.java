@@ -108,9 +108,9 @@ public class PrincipalEvents {
             }
             
             this.principal.getBtSizeX1().setForeground(Color.YELLOW);
-            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 0));
+            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 51));
             
             
             this.principal.getBtSizeX1().setEnabled(false);
@@ -136,10 +136,10 @@ public class PrincipalEvents {
                 });
             }
             
+            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 51));
             this.principal.getBtSizeX2().setForeground(Color.YELLOW);
-            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 0));
+            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 51));
             
             this.principal.getBtSizeX1().setEnabled(true);
             this.principal.getBtSizeX2().setEnabled(false);
@@ -164,10 +164,10 @@ public class PrincipalEvents {
                 });
             }
             
+            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 51));
             this.principal.getBtSizeX3().setForeground(Color.YELLOW);
-            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 0));
+            this.principal.getBtSizeX4().setForeground(new Color(255, 153, 51));
             
             this.principal.getBtSizeX1().setEnabled(true);
             this.principal.getBtSizeX2().setEnabled(true);
@@ -193,10 +193,10 @@ public class PrincipalEvents {
                 }
                 
                 
+            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 51));
+            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 51));
             this.principal.getBtSizeX4().setForeground(Color.YELLOW);
-            this.principal.getBtSizeX2().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX3().setForeground(new Color(255, 153, 0));
-            this.principal.getBtSizeX1().setForeground(new Color(255, 153, 0));
                 
             this.principal.getBtSizeX1().setEnabled(true);
             this.principal.getBtSizeX2().setEnabled(true);
@@ -304,7 +304,6 @@ public class PrincipalEvents {
         nuevoElemento.getTxtTitulo().setLocation(1, nuevoElemento.getPreferredSize().height - 21);
 
         this.principal.getPanelImagenes().add(nuevoElemento);
-
         this.principal.getPanelImagenes().updateUI();
     }
     
@@ -318,6 +317,7 @@ public class PrincipalEvents {
                 this.elemenVista = new ElementoVista(new ImageIcon(imagenReescalada));
 
                 this.elemenVista.addTitulo(e.getNombre());
+                this.elemenVista.addDescripcion(e.getDescripcion());
                 acomodarElementos(this.elemenVista);
                 
             } catch (IOException ex) {
@@ -326,19 +326,19 @@ public class PrincipalEvents {
         } else {
             this.elemenVista = new ElementoVista("Image not found.");
             this.elemenVista.addTitulo(e.getNombre());
+            this.elemenVista.addDescripcion(e.getDescripcion());
             acomodarElementos(this.elemenVista);
         }
         
     }
     
     private void filtrarElementos(KeyEvent ke) {       
-        String txtBuscar = this.principal.getTfBuscar().getText();      
-        String BuscarLowerCase = txtBuscar.toLowerCase();
+        String txtBuscar = this.principal.getTfBuscar().getText().toLowerCase();
         
         this.elemenLista.clear();
         for (Iterator<Elementos> it = this.elemenDB.getElements(cateTemp.getId()).iterator(); it.hasNext();) {
             Elementos elemento = it.next();
-            if(elemento.getNombre().startsWith(txtBuscar)) {
+            if(elemento.getNombre().toLowerCase().startsWith(txtBuscar)) {
                 this.elemenLista.add(elemento);
             }
         }
@@ -349,7 +349,7 @@ public class PrincipalEvents {
         this.elemenLista.stream().forEach(filter -> {
             String elemen = filter.getNombre().toLowerCase();
             
-            if(elemen.startsWith(BuscarLowerCase)) {
+            if(elemen.startsWith(txtBuscar)) {
                 filtroYAcomodamiento(filter);
             }
             
