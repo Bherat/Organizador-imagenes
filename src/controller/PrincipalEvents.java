@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -40,6 +39,8 @@ public class PrincipalEvents {
     
     private int dmnsX = 160;
     private int dmnsY = 175;
+    private final int sizeViewWidht = 160;
+    private final int sizeViewHeight = 175;
     
     private ArrayList<Elementos> elemenLista;
     private Categorias cateTemp;
@@ -92,8 +93,9 @@ public class PrincipalEvents {
         });
         
         this.principal.getBtSizeX1().addActionListener(al -> {
-            this.dmnsX = 160;
-            this.dmnsY = 175;
+            
+            this.dmnsX = this.sizeViewWidht;
+            this.dmnsY = this.sizeViewHeight;
 
             this.principal.getPanelImagenes().removeAll();
 
@@ -117,12 +119,14 @@ public class PrincipalEvents {
             this.principal.getBtSizeX2().setEnabled(true);
             this.principal.getBtSizeX3().setEnabled(true);
             this.principal.getBtSizeX4().setEnabled(true);
+
+        
             
         });
         
         this.principal.getBtSizeX2().addActionListener(al -> {
-            this.dmnsX = 160 * 2;
-            this.dmnsY = 175 * 2;
+            this.dmnsX = this.sizeViewWidht * 2;
+            this.dmnsY = this.sizeViewHeight * 2;
 
             this.principal.getPanelImagenes().removeAll();
 
@@ -149,8 +153,8 @@ public class PrincipalEvents {
         });
         
         this.principal.getBtSizeX3().addActionListener(al -> {
-            this.dmnsX = 160 * 3;
-            this.dmnsY = 175 * 3;
+            this.dmnsX = this.sizeViewWidht * 3;
+            this.dmnsY = this.sizeViewHeight * 3;
 
             this.principal.getPanelImagenes().removeAll();
 
@@ -177,8 +181,8 @@ public class PrincipalEvents {
         });
         
         this.principal.getBtSizeX4().addActionListener((ActionEvent al) -> {
-                this.dmnsX = 160 * 4;
-                this.dmnsY = 175 * 4;
+                this.dmnsX = this.sizeViewWidht * 4;
+                this.dmnsY = this.sizeViewHeight * 4;
 
                 this.principal.getPanelImagenes().removeAll();
 
@@ -309,10 +313,11 @@ public class PrincipalEvents {
     
 
     private void filtroYAcomodamiento(Elementos e) {
+        
         if(e.getImagen() != null) {
             try {                
                 BufferedImage buffImag = ImageIO.read(e.getImagen());
-                Image imagenReescalada = buffImag.getScaledInstance(this.dmnsX - 2, this.dmnsY - 2, 1);
+                Image imagenReescalada = buffImag.getScaledInstance(this.dmnsX - 2, this.dmnsY - 2, Image.SCALE_SMOOTH);
 
                 this.elemenVista = new ElementoVista(new ImageIcon(imagenReescalada));
 
@@ -332,30 +337,31 @@ public class PrincipalEvents {
         
     }
     
-    private void filtrarElementos(KeyEvent ke) {       
+    private void filtrarElementos(KeyEvent ke) {
         String txtBuscar = this.principal.getTfBuscar().getText().toLowerCase();
+        int cantElementos = this.principal.getPanelImagenes().getComponentCount();
         
-        this.elemenLista.clear();
-        for (Iterator<Elementos> it = this.elemenDB.getElements(cateTemp.getId()).iterator(); it.hasNext();) {
-            Elementos elemento = it.next();
-            if(elemento.getNombre().toLowerCase().startsWith(txtBuscar)) {
-                this.elemenLista.add(elemento);
-            }
+        for (int i = 0; i < cantElementos; i++) {
+        ElementoVista EP = (ElementoVista)this.principal.getPanelImagenes().getComponent(i);
+        String nombre = EP.getTxtTitulo().getText().toLowerCase();
+        
+        if(!nombre.startsWith(txtBuscar) && !nombre.endsWith(txtBuscar)) {
+            EP.setVisible(false);
         }
         
-        this.principal.getPanelImagenes().removeAll();
-        this.principal.getPanelImagenes().updateUI();        
+        if(txtBuscar.isEmpty()) {
+            EP.setVisible(true);
+        }
         
-        this.elemenLista.stream().forEach(filter -> {
-            String elemen = filter.getNombre().toLowerCase();
             
-            if(elemen.startsWith(txtBuscar)) {
-                filtroYAcomodamiento(filter);
-            }
             
-        });
+            
+        }
+        
+        this.principal.getPanelImagenes().updateUI();
         
     }
+
     
     
 }

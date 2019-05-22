@@ -42,7 +42,7 @@ public class Principal extends VistaPrincipal {
         
         
             this.btSizeX1.setForeground(Color.YELLOW);
-            this.btSizeX1.setEnabled(false);
+            //this.btSizeX1.setEnabled(false);
         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
