@@ -8,17 +8,13 @@ import model.PrincipalDB;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import model.Categorias;
 import model.Elementos;
 import model.ElementosDB;
+import model.ImagesActions;
 import view.ElementoVista;
 import view.NCategoria;
 import view.Principal;
@@ -315,19 +311,15 @@ public class PrincipalEvents {
     private void filtroYAcomodamiento(Elementos e) {
         
         if(e.getImagen() != null) {
-            try {                
-                BufferedImage buffImag = ImageIO.read(e.getImagen());
-                Image imagenReescalada = buffImag.getScaledInstance(this.dmnsX - 2, this.dmnsY - 2, Image.SCALE_SMOOTH);
-
-                this.elemenVista = new ElementoVista(new ImageIcon(imagenReescalada));
-
-                this.elemenVista.addTitulo(e.getNombre());
-                this.elemenVista.addDescripcion(e.getDescripcion());
-                acomodarElementos(this.elemenVista);
                 
-            } catch (IOException ex) {
-                Logger.getLogger(PrincipalEvents.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Image imagenReescalada = ImagesActions.imagenReescalada(e.getImagen(), this.dmnsX -2, this.dmnsY -2);
+
+            this.elemenVista = new ElementoVista(new ImageIcon(imagenReescalada));
+
+            this.elemenVista.addTitulo(e.getNombre());
+            this.elemenVista.addDescripcion(e.getDescripcion());
+            acomodarElementos(this.elemenVista);
+                
         } else {
             this.elemenVista = new ElementoVista("Image not found.");
             this.elemenVista.addTitulo(e.getNombre());
@@ -342,20 +334,16 @@ public class PrincipalEvents {
         int cantElementos = this.principal.getPanelImagenes().getComponentCount();
         
         for (int i = 0; i < cantElementos; i++) {
-        ElementoVista EP = (ElementoVista)this.principal.getPanelImagenes().getComponent(i);
-        String nombre = EP.getTxtTitulo().getText().toLowerCase();
-        
-        if(!nombre.startsWith(txtBuscar) && !nombre.endsWith(txtBuscar)) {
-            EP.setVisible(false);
-        }
-        
-        if(txtBuscar.isEmpty()) {
-            EP.setVisible(true);
-        }
-        
-            
-            
-            
+            ElementoVista EP = (ElementoVista)this.principal.getPanelImagenes().getComponent(i);
+            String nombre = EP.getTxtTitulo().getText().toLowerCase();
+
+            if(!nombre.startsWith(txtBuscar) && !nombre.endsWith(txtBuscar)) {
+                EP.setVisible(false);
+            }
+
+            if(txtBuscar.isEmpty()) {
+                EP.setVisible(true);
+            }
         }
         
         this.principal.getPanelImagenes().updateUI();

@@ -11,13 +11,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -25,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import model.Categorias;
+import model.ImagesActions;
 import view.Principal;
 import view.UIElementosModel;
 
@@ -40,8 +36,6 @@ public class UIElementosEvents
     ElementosDB elemDB;
     PrincipalDB prinDB;
     
-    Image imagenEscalada;
-    File file;
     InputStream inputStream = null;
     byte[] imageByte;
 
@@ -81,33 +75,15 @@ public class UIElementosEvents
         int fileSeleccion = chooser.showOpenDialog(UIElement);
         
         if(fileSeleccion == JFileChooser.APPROVE_OPTION) {
-            this.file = new File(chooser.getSelectedFile().getAbsolutePath());
-            try {
-                BufferedImage image = ImageIO.read(this.file);
-                this.inputStream = new FileInputStream(this.file);
+            File file = new File(chooser.getSelectedFile().getAbsolutePath());
+            
+            this.imageByte = ImagesActions.fileAImagen(file);
 
-                ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-                byte[] buff = new byte[1024];
-
-                for (int read; (read = inputStream.read(buff)) != -1 ;) {
-                    byteOutputStream.write(buff, 0, read);
-                }
-
-                this.imageByte = byteOutputStream.toByteArray();
-
-
-                if(image != null) {
-                    JPanel panel = this.UIElement.getPanelImagen();
-                    this.imagenEscalada = image.getScaledInstance(panel.getWidth(), panel.getHeight(), 0);
-
-                    this.UIElement.getImagen().setIcon(new ImageIcon(this.imagenEscalada));
-                    this.UIElement.getImagen().setText("");
-                }
-                
-                
-            } catch(IOException ex) {
-                System.out.println(ex.getMessage());
-            }
+            JPanel panel = this.UIElement.getPanelImagen();
+            Image imagenEscalada = ImagesActions.fileAImagenReescalada(file, panel.getWidth(), panel.getHeight());
+            this.UIElement.getImagen().setIcon(new ImageIcon(imagenEscalada));
+            this.UIElement.getImagen().setText("");
+            
             fileSeleccion = 0;
         }
         
